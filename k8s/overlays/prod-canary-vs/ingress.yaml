@@ -1,0 +1,19 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    konghq.com/preserve-host: "false"
+  name: argo-demo
+spec:
+  ingressClassName: kong
+  rules:
+  - host: rollouts-canary.lab
+    http:
+      paths:
+      - backend:
+          service:
+            name: argo-demo
+            port:
+              name: http-80
+        path: /
+        pathType: Prefix

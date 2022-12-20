@@ -1,0 +1,20 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Rollout
+metadata:
+  name: argo-demo
+spec:
+  strategy:
+    $patch: replace
+    canary:
+      canaryService: argo-demo-preview
+      stableService: argo-demo
+      trafficRouting:
+        nginx:
+          stableIngress: argo-demo
+      steps:
+        - setWeight: 10
+        - pause:
+            duration: 10s
+        - setWeight: 50
+        - pause: { }
+        - setWeight: 100

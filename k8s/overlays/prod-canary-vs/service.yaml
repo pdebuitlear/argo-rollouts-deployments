@@ -1,0 +1,6 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: argo-demo
+  annotations:
+    ingress.kubernetes.io/service-upstream: 'true'

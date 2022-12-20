@@ -1,0 +1,18 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Rollout
+metadata:
+  name: argo-demo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: argo-demo
+  workloadRef:                                 # Reference an existing Deployment using workloadRef field
+    apiVersion: apps/v1
+    kind: Deployment
+    name: argo-demo      
+  strategy:
+    blueGreen:
+      activeService: argo-demo
+      previewService: argo-demo-preview
+      autoPromotionEnabled: false

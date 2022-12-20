@@ -1,0 +1,26 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Rollout
+metadata:
+  name: argo-demo
+spec:
+  strategy:
+    $patch: replace
+    canary:
+      trafficRouting:
+        istio:
+          virtualService:
+            name: argo-demo-vs            
+            routes:
+              - primary                 # optional if there is a single route in VirtualService, required otherwise
+          destinationRule:
+            name: argo-demo-dr    # required
+            canarySubsetName: canary  # required
+            stableSubsetName: stable  # required              
+      steps:
+        - setWeight: 10
+        - pause: { }
+            # duration: 10s
+        - setWeight: 50
+        - pause: { }
+        - setWeight: 90
+        - pause: { }

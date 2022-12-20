@@ -1,0 +1,15 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: argo-demo-preview
+  annotations:
+    ingress.kubernetes.io/service-upstream: 'true'
+spec:
+  type: ClusterIP
+  ports:
+    - port: 80
+      targetPort: 5000
+      protocol: TCP
+      name: http-80
+  selector:
+    app: argo-demo      

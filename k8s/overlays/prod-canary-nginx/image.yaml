@@ -1,0 +1,6 @@
+- op: replace
+  path: /spec/template/spec/containers/0/image
+  value: "particule/simplecolorapi:1.0"
+- op: replace
+  path: /spec/template/spec/containers/0/imagePullPolicy
+  value: "IfNotPresent"

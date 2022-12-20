@@ -1,0 +1,19 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    ingress.kubernetes.io/service-upstream: 'true'
+  name: argo-demo
+spec:
+  ingressClassName: kong
+  rules:
+  - host: rollouts-blue-green.lab
+    http:
+      paths:
+      - backend:
+          service:
+            name: argo-demo
+            port:
+              number: 80
+        path: /
+        pathType: Prefix

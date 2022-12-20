@@ -1,0 +1,16 @@
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: argo-demo-vs
+spec:
+  hosts:
+  - argo-demo.argo-demo-prod.svc.cluster.local
+  http:
+  - name: primary        # referenced in canary.trafficRouting.istio.virtualService.routes
+    route:
+    - destination:
+        host: argo-demo.argo-demo-prod.svc.cluster.local
+      weight: 100
+    - destination:
+        host: argo-demo-preview.argo-demo-prod.svc.cluster.local
+      weight: 0
