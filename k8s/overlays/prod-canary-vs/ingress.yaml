@@ -7,13 +7,13 @@ metadata:
 spec:
   ingressClassName: kong
   rules:
-  - host: rollouts-canary.lab
+  - host: rollouts-canary-vs.lab
     http:
       paths:
       - backend:
           service:
             name: argo-demo
             port:
-              name: http-80
+              number: 80
         path: /
         pathType: Prefix

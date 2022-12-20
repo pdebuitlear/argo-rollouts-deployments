@@ -1,6 +1,6 @@
 commonLabels:
   app: argo-demo
-namespace: argo-demo-prod
+namespace: argo-demo-prod-vs-dr
 commonAnnotations:
   note: production
 resources:

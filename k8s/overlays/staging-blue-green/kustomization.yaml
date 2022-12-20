@@ -1,6 +1,6 @@
 commonLabels:
   app: argo-demo
-namespace: argo-demo-staging
+#namespace: argo-demo-staging
 commonAnnotations:
   note: staging
 resources:

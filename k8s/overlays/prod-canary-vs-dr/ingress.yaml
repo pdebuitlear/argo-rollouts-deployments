@@ -7,7 +7,7 @@ metadata:
 spec:
   ingressClassName: kong
   rules:
-  - host: rollouts-canary.lab
+  - host: rollouts-canary-vs-dr.lab
     http:
       paths:
       - backend:
