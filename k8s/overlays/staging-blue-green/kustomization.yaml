@@ -10,7 +10,7 @@ resources:
 bases:
   - ../../base
 patches:
-  - replica_count.yaml
+  - replica-count.yaml
   - config.yaml
 patchesJson6902:
   - target:
