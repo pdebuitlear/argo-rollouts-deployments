@@ -8,7 +8,7 @@ resources:
   - preview-service.yaml
   - ingress.yaml
 bases:
-  - github.com/pdebuitlear/argo-rollouts-deployments/tree/main/k8s/base
+  - github.com/pdebuitlear/argo-rollouts-deployments.git//k8s/base?ref=main
 patches:
   - replica_count.yaml
   - config.yaml
