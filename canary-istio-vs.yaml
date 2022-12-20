@@ -1,0 +1,15 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: canary-istio-vs
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/pdebuitlear/argo-rollouts-deployments.git
+    targetRevision: HEAD
+    path: k8s/overlays/prod-canary-vs
+  destination:
+    server: https://argocd.lab/
+    namespace: argo-demo-prod
+
