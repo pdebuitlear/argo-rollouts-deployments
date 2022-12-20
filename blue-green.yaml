@@ -10,6 +10,6 @@ spec:
     targetRevision: HEAD
     path: k8s/overlays/staging-blue-green
   destination:
-    server: https://argocd.lab/
+    server: https://kubernetes.default.svc
     namespace: argo-demo-staging
 
