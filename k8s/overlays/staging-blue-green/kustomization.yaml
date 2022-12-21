@@ -16,4 +16,4 @@ patchesStrategicMerge:
 # - deployment.yaml
 images:
 - name: particule/simplecolorapi
-  newTag: "1.0"
+  newTag: "2.0"
