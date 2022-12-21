@@ -58,27 +58,52 @@ There are a number of different deployment stategies proved out in this reposito
 > ```
 ><br />
 ----
-
-## Deployment Strategies
-
-### Argo Rollouts User Interfaces
+## Argo Rollouts User Interfaces
 **Argo Rollouts dashboard**
 ```
 kubectl argo rollouts dashboard &
 ```
-**Argo CD Rollouts extension**
 
-### Blue Green
-#### Running locally:
-**Initial deployment**
-```
-kubectl apply -k k8s/overlays/staging-blue-green/
-```
+![Argo Rollouts dashboard](./docs/Rollouts.png)
 
-**Update image**
-```
-kubectl argo rollouts -n blue-green set image blue-green blue-green=particule/simplecolorapi:2.0
-```
+</BR>
+
+**ArgoCD Rollouts extension**
+
+Alternatively the promotion logic is also available directly via the ArgoCd UI:
+![Argo Rollouts dashboard](./docs/ArgoCD-Rollouts-Extension.png)
+
+----
+
+## Deployment Strategies
+
+
+
+
+### Blue Green strategy
+#### Run locally (without ArgoCD):
+>```
+>kubectl apply -k k8s/overlays/staging-blue-green/
+>```
+>
+>Update image
+>```
+>kubectl argo rollouts -n blue-green set image blue-green blue-green=particule/simplecolorapi:2.0
+>```
+></BR>
+</BR>
+
+#### Run via ArgoCD
+>```
+>k apply -f blue-green.yaml
+>```
+>
+>Update image
+>```
+>( cd k8s/overlays/staging-blue-green/ && kustomize edit set image particule/simplecolorapi:2.0 )
+>git add . && git commit -m "pushing blue/green deployment" && git push
+>```
+
 
 **Test**
 ```
