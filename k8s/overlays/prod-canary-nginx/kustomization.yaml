@@ -12,10 +12,4 @@ bases:
 patches:
   - config.yaml
   - rollout.yaml
-patchesJson6902:
-  - target:
-      group: argoproj.io
-      version: v1alpha1
-      kind: Rollout
-      name: argo-demo
-    path: image.yaml
+  - deployment.yaml

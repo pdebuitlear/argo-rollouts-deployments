@@ -88,13 +88,13 @@ curl -s -k $PROXY_IP -H "Host: rollouts-blue-green.lab"
 
 **Promote deployment via kubectl plugin**
 ```
-kubectl argo rollouts -n argo-demo-staging promote argo-demo
+kubectl argo rollouts -n argo-demo-prod-vs-dr promote argo-demo
 ```
 
 
 **Monitoring via the Argo Rollouts kubectl plugin**
 ```
-kubectl argo rollouts -n argo-demo-staging get rollout argo-demo -w
+kubectl argo rollouts -n argo-demo-prod-vs-dr get rollout argo-demo -w
 ```
 
 

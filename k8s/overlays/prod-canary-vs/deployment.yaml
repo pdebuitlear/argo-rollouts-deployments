@@ -7,5 +7,5 @@ spec:
     spec:
       containers:
         - name: argo-demo
-          image: particule/simplecolorapi:2.0
+          image: particule/simplecolorapi:1.0
           imagePullPolicy: IfNotPresent
