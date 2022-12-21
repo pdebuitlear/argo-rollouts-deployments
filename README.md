@@ -141,5 +141,6 @@ k apply -k argo-demo/k8s/overlays/prod-canary-vs/
 
 
 
+
 Suitability of Canary deployments:
 https://www.getambassador.io/docs/argo/latest/concepts/canary
