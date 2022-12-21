@@ -1,0 +1,11 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: argo-demo
+spec:
+  template:
+    spec:
+      containers:
+        - name: argo-demo
+          image: particule/simplecolorapi:1.0
+          imagePullPolicy: IfNotPresent
