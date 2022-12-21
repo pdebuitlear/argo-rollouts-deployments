@@ -75,10 +75,10 @@ Alternatively the promotion logic is also available directly via the ArgoCd UI:
 
 ----
 
-## Deployment Strategies
+## Deployment Strategies - Blue Green
 
 
-### Blue Green strategy - via GitOps with ArgoCD:
+### Via GitOps with ArgoCD:
 
 **Deploy the ArgoCD "Application" configuration**
 
@@ -113,7 +113,7 @@ Alternatively the promotion logic is also available directly via the ArgoCd UI:
 > Both the ArgoCD Rollouts extention, or the Argo Rollouts dashboard could be used to promote the Rollout as per the screenshots above. 
 > Alternatively the CLI could be used:
 >```
->kubectl argo rollouts -n argo-demo-prod-vs-dr promote argo-demo
+>kubectl argo rollouts -n argo-demo-staging promote argo-demo
 >```
 >The promoted code can be tested via the Ingress as follows:
 >```
@@ -139,9 +139,11 @@ Alternatively the promotion logic is also available directly via the ArgoCd UI:
 >```
 ></BR>
 </BR>
+</BR>
 
 
-### Canary strategy - via GitOps with ArgoCD - Istio with VirtualServices only:
+## Deployment Strategies - Canary strategy 
+### Istio with VirtualServices Via GitOps with ArgoCD
 
 **Deploy the ArgoCD "Application" configuration**
 
@@ -170,27 +172,33 @@ Alternatively the promotion logic is also available directly via the ArgoCd UI:
 >git add . && git commit -m "pushing blue/green deployment" && git push
 >```
 
+**Progressing the Rollout**
+>Straight away we should start seeing 1 in 10 requests going to the Canary deployment, i.e. returning a "blue" response from the API.
+>The deployment can be progressed with via the UI or using the following command
+>```
+>kubectl argo rollouts -n argo-demo-prod-vs promote argo-demo
+>```
+>As the rollout progresses this is reflected in the responses from the Canary deployment.
+> See the help option on teh Argo rollouts command for more info:
+>``` 
+>kubectl argo rollouts -h
+>```
+></BR>
+</BR>
 
+-----
+### Canary traffic management options
 
+This repo contains examples for 3 of the options for deploying code with the Canary strategy in Argo rollouts. Those are the:
+* [Nginx ](https://argoproj.github.io/argo-rollouts/features/traffic-management/nginx/)
+  * suitable for UI canary deployments potentially ( TODO: need to look into sticky sessions )
+* [Istio - host level traffic splitting (VirtualServices)](https://argoproj.github.io/argo-rollouts/features/traffic-management/istio/#host-level-traffic-splitting)
+  * Less CRDS that subset level traffic splitting
+* [Istio - subset level traffic splitting (VirtualServices and DestinationRules)](https://argoproj.github.io/argo-rollouts/features/traffic-management/istio/#subset-level-traffic-splitting)
 
-**Test**
+With the implementation of the Gateway APIs in Kubernetes, this space will change and there will be more native capabilites in the Kubernetes CRDS. Support in Kong similar to that in Nginx currently, is likely to accompany those Gateway API implmentations. Removing the need to to use Istio for this purpose. Its another option. Istio covers North/South as well as East/West traffic management, Kong would only support traffic management for North/South traffic I suspect though.
 
-while true; do curl -s -k https://rollouts-canary-vs.lab/ | jq .color; sleep 0.1; done
-
-
-
-
-#### References - Examples:
-https://particule.io/en/blog/argocd-canary/
-https://github.com/christianh814/gitops-examples
-https://github.com/makocchan0509/bookinfo-manifests
-
-VirtualServices and DestinationRules
-https://istio.io/v1.1/docs/reference/config/networking/v1alpha3/virtual-service/
-
-
-
-## Argo CD
+-----
 
 ## Necessary annotations to enable integration with the traffic management capabilies in Istio
 
@@ -207,16 +215,22 @@ annotations:
 ```
 
 
-kubectl argo rollouts dashboard &
+-----
 
-The Blue-Green strategy, which is is not dependent on service mesh or SMI is in the staging-blue-green kustomize overlay.
-
-k apply -k argo-demo/k8s/overlays/prod-canary-vs/
-
-
-
-
-
-
-Suitability of Canary deployments:
+## Suitability of Canary deployment strategy:
 https://www.getambassador.io/docs/argo/latest/concepts/canary
+
+----
+
+
+## References
+*Examples:*
+
+https://particule.io/en/blog/argocd-canary/
+https://github.com/christianh814/gitops-examples
+https://github.com/makocchan0509/bookinfo-manifests
+
+*VirtualServices and DestinationRules*
+https://istio.io/v1.1/docs/reference/config/networking/v1alpha3/virtual-service/
+
+</BR>
