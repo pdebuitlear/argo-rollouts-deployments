@@ -69,6 +69,7 @@ kubectl argo rollouts dashboard &
 **Argo CD Rollouts extension**
 
 ### Blue Green
+#### Running locally:
 **Initial deployment**
 ```
 kubectl apply -k k8s/overlays/staging-blue-green/
@@ -77,6 +78,12 @@ kubectl apply -k k8s/overlays/staging-blue-green/
 **Update image**
 ```
 kubectl argo rollouts -n blue-green set image blue-green blue-green=particule/simplecolorapi:2.0
+```
+
+**Test**
+```
+while true; do curl -s -k https://rollouts-blue-green.lab/ | jq .color; sleep
+ 0.1; done
 ```
 
 **Port forward service & test**
@@ -97,6 +104,8 @@ kubectl argo rollouts -n argo-demo-prod-vs-dr promote argo-demo
 kubectl argo rollouts -n argo-demo-prod-vs-dr get rollout argo-demo -w
 ```
 
+
+while true; do curl -s -k https://rollouts-canary-vs.lab/ | jq .color; sleep 0.1; done
 
 **Cleanup - removal**
 ```
