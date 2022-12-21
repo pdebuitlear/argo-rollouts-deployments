@@ -4,12 +4,17 @@ namespace: argo-demo-staging
 commonAnnotations:
   note: staging
 resources:
-  - namespace.yaml
-  - preview-service.yaml
-  - ingress.yaml
-bases:
-  - ../../base
-patches:
-  - replica-count.yaml
-  - config.yaml
-  - deployment.yaml
+- namespace.yaml
+- preview-service.yaml
+- ingress.yaml
+- ../../base
+patchesStrategicMerge:
+- replica-count.yaml
+- config.yaml
+# - deployment.yaml
+
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+images:
+- name: simplecolorapi
+  newTag: 1.0
