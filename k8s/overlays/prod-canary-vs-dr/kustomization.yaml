@@ -14,5 +14,6 @@ patches:
   - config.yaml
   - rollout.yaml
   - service.yaml  
-  - deployment.yaml
-   
+images:
+- name: particule/simplecolorapi
+  newTag: "1.0"

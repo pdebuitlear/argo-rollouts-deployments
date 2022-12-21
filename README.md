@@ -78,64 +78,106 @@ Alternatively the promotion logic is also available directly via the ArgoCd UI:
 ## Deployment Strategies
 
 
+### Blue Green strategy - via GitOps with ArgoCD:
 
+**Deploy the ArgoCD "Application" configuration**
 
-### Blue Green strategy
-#### Run locally (without ArgoCD):
->```
->kubectl apply -k k8s/overlays/staging-blue-green/
->```
->
->Update image
->```
->kubectl argo rollouts -n blue-green set image blue-green blue-green=particule/simplecolorapi:2.0
->```
 ></BR>
-</BR>
 
-#### Run via ArgoCD
 >```
->k apply -f blue-green.yaml
+>kubectl apply -f blue-green.yaml
 >```
+> This will automatically deploy the initial version of the image as configured in the Kustomization file for this overlay.
+>Once the inital image is deployed we can proceed with a deployment of the "Green" image.
+
+**Update image**
 >
->Update image
+> Lets configure the new image in the kustomize overlay and commit to GitHub
 >```
 >( cd k8s/overlays/staging-blue-green/ && kustomize edit set image particule/simplecolorapi:2.0 )
 >git add . && git commit -m "pushing blue/green deployment" && git push
 >```
 
 
-**Test**
-```
-while true; do curl -s -k https://rollouts-blue-green.lab/ | jq .color; sleep
- 0.1; done
-```
-
 **Port forward service & test**
-```
-kubectl port-forward svc/argo-demo-preview 8080:80 -n argo-demo-staging
-export PROXY_IP=$(minikube service -n kong-istio kong-istio-kong-proxy --url | head -1) 
-curl -s -k $PROXY_IP -H "Host: rollouts-blue-green.lab"
-```
-
-**Promote deployment via kubectl plugin**
-```
-kubectl argo rollouts -n argo-demo-prod-vs-dr promote argo-demo
-```
+> With the Blue/Green strategy ArgoCD will eventually (if webhook is not configured) deploy the "Green" instance of the service (not exposed externally) and it should be testable via port forwarding, E.g. 
+> ```
+> kubectl port-forward svc/argo-demo-preview 8080:80 -n argo-demo-staging
+> curl -s  http://127.0.0.1:8080
+>```
+>
 
 
-**Monitoring via the Argo Rollouts kubectl plugin**
-```
-kubectl argo rollouts -n argo-demo-prod-vs-dr get rollout argo-demo -w
-```
 
+**Promotion of the deployment**
+> Both the ArgoCD Rollouts extention, or the Argo Rollouts dashboard could be used to promote the Rollout as per the screenshots above. 
+> Alternatively the CLI could be used:
+>```
+>kubectl argo rollouts -n argo-demo-prod-vs-dr promote argo-demo
+>```
+>The promoted code can be tested via the Ingress as follows:
+>```
+> export PROXY_IP=$(minikube service -n kong-istio kong-istio-kong-proxy --url | head -1) 
+>curl -s -k $PROXY_IP -H "Host: rollouts-blue-green.lab"
+>```
+>
+
+*CLI Commands when running Argo without ArgoCD*
+>Deploy overlay with Argo Rollouts CRD
+>```
+>kubectl apply -k k8s/overlays/staging-blue-green/
+>```
+>
+>Update image via Argo Rollouts CLI
+>```
+>kubectl argo rollouts -n argo-demo-staging set image argo-demo argo-demo=particule/simplecolorapi:2.0
+>```
+>
+>Monitoring via the Argo Rollouts kubectl plugin
+>```
+>kubectl argo rollouts -n argo-demo-staging get rollout argo-demo -w
+>```
+></BR>
+</BR>
+
+
+### Canary strategy - via GitOps with ArgoCD - Istio with VirtualServices only:
+
+**Deploy the ArgoCD "Application" configuration**
+
+></BR>
+
+>```
+>kubectl apply -f canary-istio-vs.yaml
+>```
+> This will automatically deploy the initial version of the image as configured in the Kustomization file for this overlay.
+>Once the inital image is deployed we can proceed with a deployment of the "Canary" image.
+
+**Monitor API**
+> Lets continuously monitor the Ingress requests in another terminal.
+>```
+>while true; do curl -s -k https://rollouts-canary-vs.lab/ | jq .color; sleep 0.1; done
+>```
+>
+></BR>
+</BR>
+
+**Update image**
+>
+> Lets configure the new image in the kustomize overlay and commit to GitHub
+>```
+>( cd k8s/overlays/prod-canary-vs/ && kustomize edit set image particule/simplecolorapi:2.0 )
+>git add . && git commit -m "pushing blue/green deployment" && git push
+>```
+
+
+
+
+**Test**
 
 while true; do curl -s -k https://rollouts-canary-vs.lab/ | jq .color; sleep 0.1; done
 
-**Cleanup - removal**
-```
-kubectl delete -k k8s/overlays/staging-blue-green/
-```
+
 
 
 #### References - Examples:

@@ -13,7 +13,6 @@ resources:
 patchesStrategicMerge:
 - replica-count.yaml
 - config.yaml
-# - deployment.yaml
 images:
 - name: particule/simplecolorapi
-  newTag: "2.0"
+  newTag: "1.0"

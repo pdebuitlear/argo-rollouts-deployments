@@ -8,7 +8,7 @@ metadata:
 spec:
   ingressClassName: nginx
   rules:
-  - host: rollouts-canary.lab
+  - host: rollouts-canary-nginx.lab
     http:
       paths:
       - backend:
