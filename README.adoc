@@ -329,5 +329,3 @@ https://particule.io/en/blog/argocd-canary/ https://github.com/christianh814/git
 _VirtualServices and DestinationRules_
 
 https://istio.io/v1.1/docs/reference/config/networking/v1alpha3/virtual-service/
-
-
